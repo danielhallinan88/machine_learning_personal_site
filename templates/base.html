@@ -10,27 +10,34 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
     <link href="{{ url_for('static', filename='css/style.css' )}}" rel="stylesheet">
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
     <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
   </head>
 
   <body>
     <!-- Example navbar: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_dropdown_navbar -->
-    <div class="navbar">
-      <a href="{{ url_for('index') }}">Daniel Hallinan</a>
-      <a href="#">Tech Blog</a>
-      <div class="dropdown">
-        <button class="dropbtn">Projects
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-content">
-          <a href="#">Digit Recognizer</a>
-          <a href="#">Dog Breed Classifier</a>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{{ url_for('index') }}">Daniel Hallinan</a>
         </div>
+        <ul class="nav navbar-nav">
+          <!--<li class="active"><a href="#">Home</a></li>-->
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ url_for('mnist') }}">Digit Recognizer</a></li>
+              <li><a href="{{ url_for('dogBreed') }}">Dog Breed Classifier</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Tech Blog</a></li>
+        </ul>
       </div>
-    </div>
+    </nav> 
 
     <h1>TESTING</h1>
     {% block content %}
