@@ -17,12 +17,19 @@
   </head>
 
   <body>
-
+    <!-- Example navbar: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_dropdown_navbar -->
     <div class="navbar">
-      <a href="#">Daniel Hallinan</a>
-      <a href="#">Projects</a>
+      <a href="{{ url_for('index') }}">Daniel Hallinan</a>
       <a href="#">Tech Blog</a>
-
+      <div class="dropdown">
+        <button class="dropbtn">Projects
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Digit Recognizer</a>
+          <a href="#">Dog Breed Classifier</a>
+        </div>
+      </div>
     </div>
 
     <h1>TESTING</h1>
