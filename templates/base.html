@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
     <link href="{{ url_for('static', filename='css/style.css' )}}" rel="stylesheet">
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Archivo+Black|Calistoga&display=swap" rel="stylesheet">
+
     <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 
@@ -34,12 +37,12 @@
               <li><a href="{{ url_for('dogBreed') }}">Dog Breed Classifier</a></li>
             </ul>
           </li>
-          <li><a href="#">Tech Blog</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
         </ul>
       </div>
-    </nav> 
+    </nav>
 
-    <h1>TESTING</h1>
     {% block content %}
 
     {% endblock %}
