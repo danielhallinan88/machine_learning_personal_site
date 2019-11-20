@@ -1,6 +1,15 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, flash
+from werkzeug.utils import secure_filename
+
+# View docs: https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
+UPLOAD_FOLDER = 'tmp'
+ALLOWED_EXTENSIONS = {'png'}
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 @app.route('/index', methods=["GET"])
