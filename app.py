@@ -60,11 +60,13 @@ def dogBreed():
             #response     = requests.get(url=EXTERNAL_URL)
             files        = {'image' : open(filepath, 'rb')}
 
-            print(files)
             response     = requests.post(url=EXTERNAL_API_URL, files=files)
+            breed = response.text
+            print(breed)
+            #print(response.request.headers)
 
-            print(response.status_code)
-            print(response.text)
+            #print(response.status_code)
+            #print(response.text)
 
     return render_template("dogBreed.html")
 
