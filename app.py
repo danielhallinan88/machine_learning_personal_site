@@ -1,16 +1,21 @@
-from flask import Flask, request, render_template, flash
+from flask import Flask, request, render_template, flash, redirect
 from werkzeug.utils import secure_filename
 from config import *
 import requests
+import time
+import os
 
 # View docs: https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
 UPLOAD_FOLDER      = 'tmp'
-ALLOWED_EXTENSIONS = {'png'}
-EXTERNAL_API_URL   = '18.191.187.159:8888'
+ALLOWED_EXTENSIONS = {'png', 'jpg'}
+EXTERNAL_API_IP    = '13.58.166.132'
+EXTERNAL_API_PORT  = '8888'
+EXTERNAL_API_URL   = 'http://{}:{}'.format(EXTERNAL_API_IP, EXTERNAL_API_PORT)
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER']    = UPLOAD_FOLDER
 app.config['EXTERNAL_API_URL'] = EXTERNAL_API_URL
+app.secret_key = b'_5#y2L"Ff943hz\n\xec]/'
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -26,8 +31,10 @@ def mnist():
 
 @app.route('/dog-breed', methods=["GET", "POST"])
 def dogBreed():
-    #return render_template("dogBreed.html")
-    print("YOU WORKING?")
+
+    if request.method == 'GET':
+        return render_template("dogBreed.html")
+
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -35,7 +42,6 @@ def dogBreed():
             return redirect(request.url)
 
         file = request.files['file']
-
 
         # if user does not select file, browser also
         # submit an empty part without filename
@@ -45,13 +51,21 @@ def dogBreed():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file', filename=filename))
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            #return redirect(url_for('uploaded_file', filename=filename))
 
-            print(EXTERNAL_API_URL)
-        #r = requests.post(url=EXTERNAL_API_URL, files=file)
-        #print(r.status_code)
-        #print(r.text)
+            API_CALL     = 'dog-classifier'
+            EXTERNAL_URL = os.path.join(EXTERNAL_API_URL, API_CALL)
+            #response     = requests.get(url=EXTERNAL_URL)
+            files        = {'image' : open(filepath, 'rb')}
+
+            print(files)
+            response     = requests.post(url=EXTERNAL_API_URL, files=files)
+
+            print(response.status_code)
+            print(response.text)
+
     return render_template("dogBreed.html")
 
 if __name__ == "__main__":
