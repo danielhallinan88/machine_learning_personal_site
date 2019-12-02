@@ -8,7 +8,7 @@ import os
 # View docs: https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
 UPLOAD_FOLDER      = 'tmp'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
-EXTERNAL_API_IP    = '13.58.166.132'
+EXTERNAL_API_IP    = '3.134.114.85'
 EXTERNAL_API_PORT  = '8888'
 EXTERNAL_API_URL   = 'http://{}:{}'.format(EXTERNAL_API_IP, EXTERNAL_API_PORT)
 
@@ -59,14 +59,12 @@ def dogBreed():
             EXTERNAL_URL = os.path.join(EXTERNAL_API_URL, API_CALL)
             #response     = requests.get(url=EXTERNAL_URL)
             files        = {'image' : open(filepath, 'rb')}
+            session      = requests.Session()
+            response     = session.post(EXTERNAL_URL, files=files)
+            session.close()
 
-            response     = requests.post(url=EXTERNAL_API_URL, files=files)
-            breed = response.text
-            print(breed)
-            #print(response.request.headers)
-
-            #print(response.status_code)
-            #print(response.text)
+            print(response.status_code)
+            print(response.text)
 
     return render_template("dogBreed.html")
 
