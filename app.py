@@ -53,14 +53,20 @@ def dogBreed():
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
-            #return redirect(url_for('uploaded_file', filename=filename))
 
             API_CALL     = 'dog-classifier'
             EXTERNAL_URL = os.path.join(EXTERNAL_API_URL, API_CALL)
-            #response     = requests.get(url=EXTERNAL_URL)
             files        = {'image' : open(filepath, 'rb')}
             session      = requests.Session()
-            response     = session.post(EXTERNAL_URL, files=files)
+
+            try:
+                response     = session.post(EXTERNAL_URL, files=files)
+
+            except requests.exceptions.ConnectionError as e:
+                print("Failed to connect to {}".format(EXTERNAL_URL))
+                session.close()
+                return redirect(request.url)
+
             session.close()
 
             print(response.status_code)
