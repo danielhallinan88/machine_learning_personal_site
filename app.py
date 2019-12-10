@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 from config import *
 import requests
 import time
+import json
 import os
 
 # View docs: https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
@@ -19,6 +20,19 @@ app.secret_key = b'_5#y2L"Ff943hz\n\xec]/'
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def answer_dog_query(data):
+    dog       = data['is_dog']
+    dog_breed = data['dog_breed'].replace('_', ' ').capitalize()
+    human     = data['is_human']
+    print(dog_breed)
+
+    if dog:
+        return "That looks like a {}.".format(dog_breed)
+    if human:
+        return "Hmmm. Seems to be human, but if it was a dog it'd be a {}.".format(dog_breed)
+
+    return "I don't think that counts as a dog or people."
 
 @app.route('/')
 @app.route('/index', methods=["GET"])
@@ -53,7 +67,6 @@ def dogBreed():
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
-            print(filepath)
 
             API_CALL     = 'dog-classifier'
             EXTERNAL_URL = os.path.join(EXTERNAL_API_URL, API_CALL)
@@ -70,9 +83,11 @@ def dogBreed():
 
             session.close()
 
-            print(response.status_code)
-            print(response.text)
-            return render_template("dogBreed.html", image=filepath)
+            dog_string = answer_dog_query(json.loads(response.text))
+
+            #print(response.status_code)
+            #print(response.text)
+            return render_template("dogBreed.html", image=filepath, dog_string=dog_string)
 
     return render_template("dogBreed.html")
 
