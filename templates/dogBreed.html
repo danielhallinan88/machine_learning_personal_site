@@ -7,4 +7,12 @@
   <input type=file name=file>
   <input type=submit value=Upload>
 </form>
+
+<!-- <img src="/static/images/german_shepherd.jpg" alt='test'>
+-->
+
+{% if image %}
+<img src="{{ image }}" alt="Dog image">
+{% endif %}
+
 {% endblock %}

@@ -6,9 +6,9 @@ import time
 import os
 
 # View docs: https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
-UPLOAD_FOLDER      = 'tmp'
+UPLOAD_FOLDER      = os.path.join('static', 'images', 'tmp')
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
-EXTERNAL_API_IP    = '3.134.114.85'
+EXTERNAL_API_IP    = '3.134.116.230'
 EXTERNAL_API_PORT  = '8888'
 EXTERNAL_API_URL   = 'http://{}:{}'.format(EXTERNAL_API_IP, EXTERNAL_API_PORT)
 
@@ -53,6 +53,7 @@ def dogBreed():
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
+            print(filepath)
 
             API_CALL     = 'dog-classifier'
             EXTERNAL_URL = os.path.join(EXTERNAL_API_URL, API_CALL)
@@ -71,6 +72,7 @@ def dogBreed():
 
             print(response.status_code)
             print(response.text)
+            return render_template("dogBreed.html", image=filepath)
 
     return render_template("dogBreed.html")
 
