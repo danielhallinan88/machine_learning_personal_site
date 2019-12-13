@@ -2,4 +2,11 @@
 
 {% block content %}
 <h1>MNIST</h1>
+<canvas id="canvasObject" width="700" height="500" style="border:1px solid #d3d3d3;">not supported</canvas>
+<script>
+var c = document.getElementById("canvasObject");
+var canvas = c.getContext("2d");
+canvas.fillStyle = "white";
+canvas.fillRect(0, 0, canvas.width, canvas.height);
+</script>
 {% endblock %}

@@ -5,12 +5,12 @@
 html,
 body {
   height: 100%;
-  background-color: #333;
+/*  background-color: #333;*/
   font-family: 'Archivo Black', sans-serif;
 }
 
 body {
-  color: #fff;
+/*  color: #fff;*/
 }
 
 .navbar {
@@ -37,5 +37,4 @@ body {
 .cover-text {
   border: 0.5em solid white;
   padding: 0 1.5rem;
-
 }
