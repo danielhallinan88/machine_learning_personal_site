@@ -9,7 +9,7 @@ import os
 # View docs: https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
 UPLOAD_FOLDER      = os.path.join('static', 'images', 'tmp')
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
-EXTERNAL_API_IP    = '3.134.116.230'
+EXTERNAL_API_IP    = '18.216.163.174'
 EXTERNAL_API_PORT  = '8888'
 EXTERNAL_API_URL   = 'http://{}:{}'.format(EXTERNAL_API_IP, EXTERNAL_API_PORT)
 
@@ -25,7 +25,16 @@ def answer_dog_query(data):
     dog       = data['is_dog']
     dog_breed = data['dog_breed'].replace('_', ' ').capitalize()
     human     = data['is_human']
-    print(dog_breed)
+
+    if dog == 'True':
+        dog = True
+    else:
+        dog = False
+
+    if human == 'True':
+        human = True
+    else:
+        human = False
 
     if dog:
         return "That looks like a {}.".format(dog_breed)
@@ -69,7 +78,8 @@ def dogBreed():
             file.save(filepath)
 
             API_CALL     = 'dog-classifier'
-            EXTERNAL_URL = os.path.join(EXTERNAL_API_URL, API_CALL)
+            EXTERNAL_URL = "{}/{}".format(EXTERNAL_API_URL, API_CALL)
+            #EXTERNAL_URL = os.path.join(EXTERNAL_API_URL, API_CALL)
             files        = {'image' : open(filepath, 'rb')}
             session      = requests.Session()
 
@@ -83,6 +93,7 @@ def dogBreed():
 
             session.close()
 
+            #print(response.text)
             dog_string = answer_dog_query(json.loads(response.text))
 
             #print(response.status_code)
