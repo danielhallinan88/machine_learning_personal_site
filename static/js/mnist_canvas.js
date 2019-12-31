@@ -1,72 +1,115 @@
-console.log("TESTING");
+var canvas, ctx, flag = false,
+    prevX = 0,
+    currX = 0,
+    prevY = 0,
+    currY = 0,
+    dot_flag = false;
 
-/*
-var canvasDiv = document.getElementById("canvasDiv");
-canvas = document.createElement('canvas');
-canvas.setAttribute('width', canvasWidth);
-canvas.setAttribute('height', canvasHeight);
-canvas.setAttribute('id', 'canvas');
-canvasDiv.appendChild(canvas);
-
-if(typeof G_vmlCanvasManager != 'undefined') {
-	canvas = G_vmlCanvasManager.initElement(canvas);
+var x = "black",
+    y = 2;
+    
+function init() {
+    canvas = document.getElementById('can');
+    ctx = canvas.getContext("2d");
+    w = canvas.width;
+    h = canvas.height;
+  
+    canvas.addEventListener("mousemove", function (e) {
+        findxy('move', e)
+    }, false);
+    canvas.addEventListener("mousedown", function (e) {
+        findxy('down', e)
+    }, false);
+    canvas.addEventListener("mouseup", function (e) {
+        findxy('up', e)
+    }, false);
+    canvas.addEventListener("mouseout", function (e) {
+        findxy('out', e)
+    }, false);
 }
-context = canvas.getContext("2d")
-*/
-
-context = document.getElementById('myCanvas').getContext("2d");
-
-$('#canvas').mousedown(function(e) {
-  var mouseX = e.pageX - this.offsetLeft;
-  var mouseY = e.pageY - this.offsetTop;
-  paint = true;
-  addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
-  redraw();
-});
-
-$('#cavas').mousemove(function(e) {
-  if(paint) {
-    addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
-    redraw();
-  }
-});
-
-$('#canvas').mouseup(function(e) {
-  paint = false;
-});
-
-$('#canvas').mouseleave(function(e) {
-  paint = false;
-});
-
-var clickX = new Array();
-var clickY = new Array();
-var clickDrag = new Array();
-var paint;
-
-function addClick(x, y, dragging)
-{
-  clickX.push(x);
-  clickY.push(y);
-  clickDrag.push(dragging);
-}
-
-function redraw() {
-  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-
-  context.strokeStyle = "#df4b26";
-  context.lineJoin = "round";
-  context.lineWidth = 5;
-
-  for(var i=0; i < clickX.length; i++) {
-    context.beginPath();
-    if(clickDrag[i] && i) {
-      context.moveTo(clickX[i-1], clickY[i-1]);
-    } else {
-      context.moveTo(clickX[i]-1, clickY[i]);
+    
+function color(obj) {
+    switch (obj.id) {
+        case "green":
+            x = "green";
+            break;
+        case "blue":
+            x = "blue";
+            break;
+        case "red":
+            x = "red";
+            break;
+        case "yellow":
+            x = "yellow";
+            break;
+        case "orange":
+            x = "orange";
+            break;
+        case "black":
+            x = "black";
+            break;
+        case "white":
+            x = "white";
+            break;
     }
-    context.lineTo(clickX[i], clickY[i]);
-    context.closePath();
-    context.stroke();
-  }
+    if (x == "white") y = 14;
+    else y = 2;
+    
+}
+    
+function draw() {
+    ctx.beginPath();
+    ctx.moveTo(prevX, prevY);
+    ctx.lineTo(currX, currY);
+    ctx.strokeStyle = x;
+    ctx.lineWidth = y;
+    ctx.stroke();
+    ctx.closePath();
+}
+    
+function erase() {
+    var m = confirm("Want to clear");
+    if (m) {
+        ctx.clearRect(0, 0, w, h);
+        document.getElementById("canvasimg").style.display = "none";
+    }
+}
+    
+function save() {
+    document.getElementById("canvasimg").style.border = "2px solid";
+    var dataURL = canvas.toDataURL('image/jpeg');
+    document.getElementById("canvasimg").src = dataURL;
+    document.getElementById("canvasimg").style.display = "inline";
+    
+}
+    
+function findxy(res, e) {
+    if (res == 'down') {
+        prevX = currX;
+        prevY = currY;
+        currX = e.clientX - canvas.offsetLeft;
+        currY = e.clientY - canvas.offsetTop;
+    
+        flag = true;
+        dot_flag = true;
+        if (dot_flag) {
+            ctx.beginPath();
+            ctx.fillStyle = x;
+            ctx.fillRect(currX, currY, 2, 2);
+            ctx.closePath();
+            dot_flag = false;
+        }
+    }
+    if (res == 'up' || res == "out") {
+        flag = false;
+    }
+    if (res == 'move') {
+        if (flag) {
+            prevX = currX;
+            prevY = currY;
+            currX = e.clientX - canvas.offsetLeft;
+            currY = e.clientY - canvas.offsetTop;
+            draw();
+        }
+    }
 }

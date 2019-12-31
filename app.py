@@ -22,19 +22,9 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def answer_dog_query(data):
-    dog       = data['is_dog']
     dog_breed = data['dog_breed'].replace('_', ' ').capitalize()
-    human     = data['is_human']
-
-    if dog == 'True':
-        dog = True
-    else:
-        dog = False
-
-    if human == 'True':
-        human = True
-    else:
-        human = False
+    dog = True if data['is_dog'] == 'True' else False
+    human = True if data['is_human'] == 'True' else False
 
     if dog:
         return "That looks like a {}.".format(dog_breed)
@@ -51,6 +41,11 @@ def index():
 @app.route('/digit-recognizer', methods=["GET", "POST"])
 def mnist():
     return render_template("mnist.html")
+
+@app.route('/testcanvas', methods=["GET", "POST"])
+def testcanvas():
+    return render_template("mnist_canvas.html")
+#    return render_template("testcanvas.html")
 
 @app.route('/dog-breed', methods=["GET", "POST"])
 def dogBreed():
